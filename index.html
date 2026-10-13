@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlTag">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>أداة ضغط الصور المجانية | ضغط وتحسين الصور أونلاين</title>
+  <title id="pageTitle">أداة ضغط الصور المجانية | ضغط وتحسين الصور أونلاين</title>
   <meta name="description" content="أداة مجانية لضغط الصور وتقليل حجمها اونلاين دون التأثير على الجودة. أدوات صور احترافية وسريعة للأفراد والمطورين.">
   
   <!-- ضع كود Google AdSense الخاص بك هنا مستقبلاً -->
@@ -22,8 +22,11 @@
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
     body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; line-height: 1.6; }
     
-    header { background: var(--card-bg); padding: 15px 20px; border-bottom: 1px solid #334155; text-align: center; }
-    header h1 { color: var(--primary); font-size: 1.8rem; }
+    header { background: var(--card-bg); padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { color: var(--primary); font-size: 1.5rem; }
+    
+    .lang-btn { background: #334155; color: var(--text-color); border: 1px solid var(--primary); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+    .lang-btn:hover { background: var(--primary); color: var(--bg-color); }
 
     .main-container { max-width: 900px; margin: 30px auto; padding: 0 20px; flex: 1; width: 100%; }
     
@@ -62,123 +65,217 @@
     /* Modals */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
     .modal-content { background: var(--card-bg); padding: 25px; border-radius: 8px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; }
-    .close-modal { position: absolute; left: 15px; top: 15px; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+    .close-modal { position: absolute; inset-inline-start: 15px; top: 15px; font-size: 20px; cursor: pointer; color: var(--text-muted); }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>أداة ضغط الصور الرقمية</h1>
+  <h1 id="navTitle">أداة ضغط الصور الرقمية</h1>
+  <button class="lang-btn" onclick="toggleLanguage()" id="langToggleBtn">English</button>
 </header>
 
 <div class="main-container">
 
-  <!-- مكان إعلانات أعلى الصفحة -->
-  <div class="ad-slot">مساحة إعلانية (Google AdSense)</div>
+  <!-- إعلانات -->
+  <div class="ad-slot" data-en="Ad Space (Google AdSense)" data-ar="مساحة إعلانية (Google AdSense)">مساحة إعلانية (Google AdSense)</div>
 
   <!-- الأداة الرئيسية -->
   <div class="tool-card">
     <div class="upload-area" onclick="document.getElementById('imageInput').click()">
-      <p style="font-size: 1.1rem; font-weight: bold;">اضغط هنا لرفع الصورة أو اسحبها إلى هنا</p>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">يدعم صيغ JPG, PNG, WebP</p>
+      <p id="uploadText1" style="font-size: 1.1rem; font-weight: bold;">اضغط هنا لرفع الصورة أو اسحبها إلى هنا</p>
+      <p id="uploadText2" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">يدعم صيغ JPG, PNG, WebP</p>
       <input type="file" id="imageInput" accept="image/*">
     </div>
 
     <div class="controls" id="controls">
-      <label for="quality">جودة الضغط: <span id="qualityVal">80</span>%</label>
+      <label for="quality"><span id="qualityText">جودة الضغط</span>: <span id="qualityVal">80</span>%</label>
       <input type="range" id="quality" min="10" max="100" value="80">
 
       <div class="preview-container">
         <div class="preview-box">
-          <h4>الصورة الأصلية</h4>
+          <h4 id="originalTitle">الصورة الأصلية</h4>
           <img id="originalImg" src="" alt="Original">
           <p id="originalSize" style="margin-top: 5px; color: var(--primary); font-weight: bold;"></p>
         </div>
         <div class="preview-box">
-          <h4>بعد الضغط</h4>
+          <h4 id="compressedTitle">بعد الضغط</h4>
           <img id="compressedImg" src="" alt="Compressed">
           <p id="compressedSize" style="margin-top: 5px; color: #4ade80; font-weight: bold;"></p>
         </div>
       </div>
 
       <a id="downloadBtn" download="compressed-image.jpg" style="text-decoration: none;">
-        <button class="btn">تحميل الصورة المضغوطة</button>
+        <button class="btn" id="downloadBtnText">تحميل الصورة المضغوطة</button>
       </a>
     </div>
   </div>
 
-  <!-- مكان إعلانات منتصف الصفحة -->
-  <div class="ad-slot">مساحة إعلانية (Google AdSense)</div>
+  <!-- إعلانات -->
+  <div class="ad-slot" data-en="Ad Space (Google AdSense)" data-ar="مساحة إعلانية (Google AdSense)">مساحة إعلانية (Google AdSense)</div>
 
-  <!-- المقال المكتوب لقبول AdSense -->
+  <!-- المقال -->
   <div class="content-section">
-    <h2>أهمية ضغط الصور وتحسين أداء المواقع الإلكترونية</h2>
-    <p>تُعد الصور من أكثر العناصر جذباً للزوار على شبكة الإنترنت، ولكنها في الوقت نفسه قد تكون السبب الرئيسي في بطء تحميل المواقع الإلكترونية، مما يؤدي إلى تجربة مستخدم سيئة وتراجع في ترتيب المواقع على محركات البحث مثل جوجل.</p>
-    <p>تتيح لك أداتنا المجانية لضغط الصور تقليل حجم ملفات الصور بنسبة تصل إلى 80% دون ملاحظة أي فقدان ملموس في الجودة البصرية. تعتمد الأداة على تقنيات ضغط متطورة تعمل مباشرة داخل متصفحك، مما يضمن أقصى درجات الأمان والخصوصية حيث لا يتم رفع صورك إلى أي سيرفرات خارجية.</p>
+    <h2 id="articleTitle">أهمية ضغط الصور وتحسين أداء المواقع الإلكترونية</h2>
+    <p id="articleP1">تُعد الصور من أكثر العناصر جذباً للزوار على شبكة الإنترنت، ولكنها في الوقت نفسه قد تكون السبب الرئيسي في بطء تحميل المواقع الإلكترونية، مما يؤدي إلى تجربة مستخدم سيئة وتراجع في ترتيب المواقع على محركات البحث مثل جوجل.</p>
+    <p id="articleP2">تتيح لك أداتنا المجانية لضغط الصور تقليل حجم ملفات الصور بنسبة تصل إلى 80% دون ملاحظة أي فقدان ملموس في الجودة البصرية. تعتمد الأداة على تقنيات ضغط متطورة تعمل مباشرة داخل متصفحك، مما يضمن أقصى درجات الأمان والخصوصية حيث لا يتم رفع صورك إلى أي سيرفرات خارجية.</p>
   </div>
 
-  <!-- الأسئلة الشائعة FAQ -->
+  <!-- الأسئلة الشائعة -->
   <div class="content-section">
-    <h2>الأسئلة الشائعة (FAQ)</h2>
+    <h2 id="faqHeader">الأسئلة الشائعة (FAQ)</h2>
     <div class="faq-item">
-      <h3>هل يتم حفظ صوري على خوادم الموقع؟</h3>
-      <p>لا، جميع عمليات الضغط والمعالجة تتم محلياً داخل متصفحك باستخدام تقنيات JavaScript المتقدمة، مما يعني أن صورك لا تغادر جهازك أبداً.</p>
+      <h3 id="faq1Q">هل يتم حفظ صوري على خوادم الموقع؟</h3>
+      <p id="faq1A">لا، جميع عمليات الضغط والمعالجة تتم محلياً داخل متصفحك باستخدام تقنيات JavaScript المتقدمة، مما يعني أن صورك لا تغادر جهازك أبداً.</p>
     </div>
     <div class="faq-item">
-      <h3>ما هي أفضل صيغة لضغط الصور للويب؟</h3>
-      <p>صيغة WebP و JPG هما الأفضل من حيث التوازن بين الحجم الصغير والجودة العالية مقارنة بصيغة PNG التي تكون أثقل حجماً.</p>
+      <h3 id="faq2Q">ما هي أفضل صيغة لضغط الصور للويب؟</h3>
+      <p id="faq2A">صيغة WebP و JPG هما الأفضل من حيث التوازن بين الحجم الصغير والجودة العالية مقارنة بصيغة PNG التي تكون أثقل حجماً.</p>
     </div>
   </div>
 
 </div>
 
-<!-- الفوتر والروابط القانونية -->
+<!-- الفوتر -->
 <footer>
-  <p>© 2026 جميع الحقوق محفوظة - أداة ضغط الصور الرقمية</p>
+  <p id="footerCopy">© 2026 جميع الحقوق محفوظة - أداة ضغط الصور الرقمية</p>
   <p style="margin-top: 10px;">
-    <a onclick="openModal('privacyModal')">سياسة الخصوصية</a> | 
-    <a onclick="openModal('termsModal')">الشروط والأحكام</a> | 
-    <a onclick="openModal('aboutModal')">من نحن</a> | 
-    <a onclick="openModal('contactModal')">اتصل بنا</a>
+    <a onclick="openModal('privacyModal')" id="linkPrivacy">سياسة الخصوصية</a> | 
+    <a onclick="openModal('termsModal')" id="linkTerms">الشروط والأحكام</a> | 
+    <a onclick="openModal('aboutModal')" id="linkAbout">من نحن</a> | 
+    <a onclick="openModal('contactModal')" id="linkContact">اتصل بنا</a>
   </p>
 </footer>
 
-<!-- Modals الصفحات القانونية -->
+<!-- Modals -->
 <div id="privacyModal" class="modal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeModal('privacyModal')">&times;</span>
-    <h2 style="color:var(--primary); margin-bottom:10px;">سياسة الخصوصية</h2>
-    <p>نحن نحترم خصوصيتك تماماً. لا نقوم بجمع أو تخزين أو مشاركة أي صور تقوم بضغطها عبر موقعنا. تتم جميع العمليات داخل متصفحك بشكل آمن. نستخدم خدمات إعلانية مثل Google AdSense لتقديم إعلانات مخصصة تعتمد على ملفات الكوكيز لتحسين تجربة المستخدم.</p>
+    <h2 id="modalPrivacyTitle" style="color:var(--primary); margin-bottom:10px;">سياسة الخصوصية</h2>
+    <p id="modalPrivacyText">نحن نحترم خصوصيتك تماماً. لا نقوم بجمع أو تخزين أو مشاركة أي صور تقوم بضغطها عبر موقعنا. تتم جميع العمليات داخل متصفحك بشكل آمن. نستخدم خدمات إعلانية مثل Google AdSense لتقديم إعلانات مخصصة تعتمد على ملفات الكوكيز لتحسين تجربة المستخدم.</p>
   </div>
 </div>
 
 <div id="termsModal" class="modal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeModal('termsModal')">&times;</span>
-    <h2 style="color:var(--primary); margin-bottom:10px;">الشروط والأحكام</h2>
-    <p>باستخدامك لهذا الموقع، فإنك توافق على استخدام الأداة للأغراض الشخصية أو التجارية المشروعة. الموقع غير مسؤول عن أي استخدام غير قانوني للملفات المضغوطة، والأداة مقدمة مجاناً كما هي بدون أي ضمانات تشغيلية معقدة.</p>
+    <h2 id="modalTermsTitle" style="color:var(--primary); margin-bottom:10px;">الشروط والأحكام</h2>
+    <p id="modalTermsText">باستخدامك لهذا الموقع، فإنك توافق على استخدام الأداة للأغراض الشخصية أو التجارية المشروعة. الموقع غير مسؤول عن أي استخدام غير قانوني للملفات المضغوطة، والأداة مقدمة مجاناً كما هي بدون أي ضمانات تشغيلية معقدة.</p>
   </div>
 </div>
 
 <div id="aboutModal" class="modal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeModal('aboutModal')">&times;</span>
-    <h2 style="color:var(--primary); margin-bottom:10px;">من نحن</h2>
-    <p>موقع أدوات رقمية مجاني يهدف إلى تقديم أدوات سريعة، آمنة، وسهلة الاستخدام للمصممين، صناع المحتوى، والمطورين لمساعدتهم في تحسين ملفاتهم وتسهيل عملهم اليومي دون الحاجة لتثبيت برامج معقدة.</p>
+    <h2 id="modalAboutTitle" style="color:var(--primary); margin-bottom:10px;">من نحن</h2>
+    <p id="modalAboutText">موقع أدوات رقمية مجاني يهدف إلى تقديم أدوات سريعة، آمنة، وسهلة الاستخدام للمصممين، صناع المحتوى، والمطورين لمساعدتهم في تحسين ملفاتهم وتسهيل عملهم اليومي دون الحاجة لتثبيت برامج معقدة.</p>
   </div>
 </div>
 
 <div id="contactModal" class="modal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeModal('contactModal')">&times;</span>
-    <h2 style="color:var(--primary); margin-bottom:10px;">اتصل بنا</h2>
-    <p>إذا كان لديك أي استفسارات أو اقتراحات لتطوير الموقع والأدوات، يمكنك التواصل معنا عبر البريد الإلكتروني الرسمى:</p>
+    <h2 id="modalContactTitle" style="color:var(--primary); margin-bottom:10px;">اتصل بنا</h2>
+    <p id="modalContactText">إذا كان لديك أي استفسارات أو اقتراحات لتطوير الموقع والأدوات، يمكنك التواصل معنا عبر البريد الإلكتروني الرسمي:</p>
     <p style="color:var(--primary); font-weight:bold; margin-top:10px;">support@mytoolswebsite.com</p>
   </div>
 </div>
 
-<!-- JavaScript للتشغيل -->
+<!-- JavaScript للتشغيل والترجمة -->
 <script>
+  let currentLang = 'ar';
+
+  const translations = {
+    ar: {
+      htmlLang: 'ar',
+      dir: 'rtl',
+      langBtn: 'English',
+      pageTitle: 'أداة ضغط الصور المجانية | ضغط وتحسين الصور أونلاين',
+      navTitle: 'أداة ضغط الصور الرقمية',
+      uploadText1: 'اضغط هنا لرفع الصورة أو اسحبها إلى هنا',
+      uploadText2: 'يدعم صيغ JPG, PNG, WebP',
+      qualityText: 'جودة الضغط',
+      originalTitle: 'الصورة الأصلية',
+      compressedTitle: 'بعد الضغط',
+      downloadBtnText: 'تحميل الصورة المضغوطة',
+      articleTitle: 'أهمية ضغط الصور وتحسين أداء المواقع الإلكترونية',
+      articleP1: 'تُعد الصور من أكثر العناصر جذباً للزوار على شبكة الإنترنت، ولكنها في الوقت نفسه قد تكون السبب الرئيسي في بطء تحميل المواقع الإلكترونية، مما يؤدي إلى تجربة مستخدم سيئة وتراجع في ترتيب المواقع على محركات البحث مثل جوجل.',
+      articleP2: 'تتيح لك أداتنا المجانية لضغط الصور تقليل حجم ملفات الصور بنسبة تصل إلى 80% دون ملاحظة أي فقدان ملموس في الجودة البصرية. تعتمد الأداة على تقنيات ضغط متطورة تعمل مباشرة داخل متصفحك، مما يضمن أقصى درجات الأمان والخصوصية حيث لا يتم رفع صورك إلى أي سيرفرات خارجية.',
+      faqHeader: 'الأسئلة الشائعة (FAQ)',
+      faq1Q: 'هل يتم حفظ صوري على خوادم الموقع؟',
+      faq1A: 'لا، جميع عمليات الضغط والمعالجة تتم محلياً داخل متصفحك باستخدام تقنيات JavaScript المتقدمة، مما يعني أن صورك لا تغادر جهازك أبداً.',
+      faq2Q: 'ما هي أفضل صيغة لضغط الصور للويب؟',
+      faq2A: 'صيغة WebP و JPG هما الأفضل من حيث التوازن بين الحجم الصغير والجودة العالية مقارنة بصيغة PNG التي تكون أثقل حجماً.',
+      footerCopy: '© 2026 جميع الحقوق محفوظة - أداة ضغط الصور الرقمية',
+      linkPrivacy: 'سياسة الخصوصية',
+      linkTerms: 'الشروط والأحكام',
+      linkAbout: 'من نحن',
+      linkContact: 'اتصل بنا',
+      modalPrivacyTitle: 'سياسة الخصوصية',
+      modalPrivacyText: 'نحن نحترم خصوصيتك تماماً. لا نقوم بجمع أو تخزين أو مشاركة أي صور تقوم بضغطها عبر موقعنا. تتم جميع العمليات داخل متصفحك بشكل آمن. نستخدم خدمات إعلانية مثل Google AdSense لتقديم إعلانات مخصصة تعتمد على ملفات الكوكيز لتحسين تجربة المستخدم.',
+      modalTermsTitle: 'الشروط والأحكام',
+      modalTermsText: 'باستخدامك لهذا الموقع، فإنك توافق على استخدام الأداة للأغراض الشخصية أو التجارية المشروعة. الموقع غير مسؤول عن أي استخدام غير قانوني للملفات المضغوطة، والأداة مقدمة مجاناً كما هي بدون أي ضمانات تشغيلية معقدة.',
+      modalAboutTitle: 'من نحن',
+      modalAboutText: 'موقع أدوات رقمية مجاني يهدف إلى تقديم أدوات سريعة، آمنة، وسهلة الاستخدام للمصممين، صناع المحتوى، والمطورين لمساعدتهم في تحسين ملفاتهم وتسهيل عملهم اليومي دون الحاجة لتثبيت برامج معقدة.',
+      modalContactTitle: 'اتصل بنا',
+      modalContactText: 'إذا كان لديك أي استفسارات أو اقتراحات لتطوير الموقع والأدوات، يمكنك التواصل معنا عبر البريد الإلكتروني الرسمي:'
+    },
+    en: {
+      htmlLang: 'en',
+      dir: 'ltr',
+      langBtn: 'العربية',
+      pageTitle: 'Free Image Compressor | Compress & Optimize Images Online',
+      navTitle: 'Digital Image Compressor',
+      uploadText1: 'Click here to upload image or drag & drop',
+      uploadText2: 'Supports JPG, PNG, WebP formats',
+      qualityText: 'Compression Quality',
+      originalTitle: 'Original Image',
+      compressedTitle: 'Compressed Image',
+      downloadBtnText: 'Download Compressed Image',
+      articleTitle: 'The Importance of Image Compression for Website Performance',
+      articleP1: 'Images are among the most engaging elements on the web, but they can also be the primary cause of slow website loading times, leading to poor user experience and lower search engine rankings.',
+      articleP2: 'Our free image compression tool allows you to reduce image file sizes by up to 80% without noticeable loss in visual quality. The tool runs entirely inside your browser, ensuring maximum security and privacy.',
+      faqHeader: 'Frequently Asked Questions (FAQ)',
+      faq1Q: 'Are my images saved on your servers?',
+      faq1A: 'No, all compression processes happen locally inside your browser using advanced JavaScript techniques, meaning your images never leave your device.',
+      faq2Q: 'What is the best image format for the web?',
+      faq2A: 'WebP and JPG formats offer the best balance between small file size and high visual quality compared to heavier PNG files.',
+      footerCopy: '© 2026 All Rights Reserved - Digital Image Compressor',
+      linkPrivacy: 'Privacy Policy',
+      linkTerms: 'Terms of Service',
+      linkAbout: 'About Us',
+      linkContact: 'Contact Us',
+      modalPrivacyTitle: 'Privacy Policy',
+      modalPrivacyText: 'We fully respect your privacy. We do not collect, store, or share any images you compress. All operations are performed securely inside your browser. We use Google AdSense to serve personalized ads.',
+      modalTermsTitle: 'Terms of Service',
+      modalTermsText: 'By using this website, you agree to use the tool for lawful personal or commercial purposes. The tool is provided for free as-is without complex operational warranties.',
+      modalAboutTitle: 'About Us',
+      modalAboutText: 'A free digital tools website aimed at providing fast, secure, and user-friendly tools for designers, content creators, and developers without requiring software installation.',
+      modalContactTitle: 'Contact Us',
+      modalContactText: 'If you have any questions or suggestions, feel free to contact us via our official email:'
+    }
+  };
+
+  function toggleLanguage() {
+    currentLang = currentLang === 'ar' ? 'en' : 'ar';
+    const t = translations[currentLang];
+
+    document.getElementById('htmlTag').setAttribute('lang', t.htmlLang);
+    document.getElementById('htmlTag').setAttribute('dir', t.dir);
+
+    // تحديث النصوص
+    for (let key in t) {
+      const el = document.getElementById(key);
+      if (el) el.innerText = t[key];
+    }
+
+    // تحديث الإعلانات
+    document.querySelectorAll('.ad-slot').forEach(slot => {
+      slot.innerText = slot.getAttribute(`data-${currentLang}`);
+    });
+  }
+
+  // الكود الخاص بالضغط ومعالجة الصور
   const imageInput = document.getElementById('imageInput');
   const qualityInput = document.getElementById('quality');
   const qualityVal = document.getElementById('qualityVal');
@@ -232,7 +329,7 @@
     };
   }
 
-  // التحكم بالـ Modals
+  // فتح وإغلاق النوافذ المنبثقة
   function openModal(id) { document.getElementById(id).style.display = 'flex'; }
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 </script>
