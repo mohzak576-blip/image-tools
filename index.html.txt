@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أداة ضغط الصور السريعة</title>
+  <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; padding: 20px; margin: 0; }
+    .container { background: #1e293b; border-radius: 12px; padding: 24px; max-width: 600px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    h1 { text-align: center; color: #38bdf8; margin-top: 0; }
+    .upload-area { border: 2px dashed #38bdf8; border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; margin-bottom: 20px; }
+    .upload-area:hover { background: #334155; }
+    input[type="file"] { display: none; }
+    .controls { display: none; margin-top: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: bold; }
+    input[type="range"] { width: 100%; margin-bottom: 15px; }
+    .preview-container { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
+    .preview-box { flex: 1; min-width: 200px; background: #0f172a; padding: 10px; border-radius: 6px; text-align: center; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    .btn { background: #38bdf8; color: #0f172a; font-weight: bold; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 15px; }
+    .btn:hover { background: #7dd3fc; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>أداة ضغط الصور المجانية</h1>
+  
+  <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+    <p>اضغط هنا لرفع الصورة أو اسحبها إلى هنا</p>
+    <input type="file" id="imageInput" accept="image/*">
+  </div>
+
+  <div class="controls" id="controls">
+    <label for="quality">جودة الضغط: <span id="qualityVal">80</span>%</label>
+    <input type="range" id="quality" min="10" max="100" value="80">
+
+    <div class="preview-container">
+      <div class="preview-box">
+        <h4>الصورة الأصلية</h4>
+        <img id="originalImg" src="" alt="Original">
+        <p id="originalSize"></p>
+      </div>
+      <div class="preview-box">
+        <h4>بعد الضغط</h4>
+        <img id="compressedImg" src="" alt="Compressed">
+        <p id="compressedSize"></p>
+      </div>
+    </div>
+
+    <a id="downloadBtn" download="compressed-image.jpg" style="text-decoration: none;">
+      <button class="btn">تحميل الصورة المضغوطة</button>
+    </a>
+  </div>
+</div>
+
+<script>
+  const imageInput = document.getElementById('imageInput');
+  const qualityInput = document.getElementById('quality');
+  const qualityVal = document.getElementById('qualityVal');
+  const originalImg = document.getElementById('originalImg');
+  const compressedImg = document.getElementById('compressedImg');
+  const originalSize = document.getElementById('originalSize');
+  const compressedSize = document.getElementById('compressedSize');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const controls = document.getElementById('controls');
+
+  let fileOriginal = null;
+
+  imageInput.addEventListener('change', (e) => {
+    fileOriginal = e.target.files[0];
+    if (!fileOriginal) return;
+
+    originalSize.innerText = (fileOriginal.size / 1024).toFixed(2) + " KB";
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      originalImg.src = event.target.result;
+      controls.style.display = 'block';
+      compressImage();
+    };
+    reader.readAsDataURL(fileOriginal);
+  });
+
+  qualityInput.addEventListener('input', () => {
+    qualityVal.innerText = qualityInput.value;
+    compressImage();
+  });
+
+  function compressImage() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = originalImg.src;
+
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      const quality = qualityInput.value / 100;
+      const dataUrl = canvas.toDataURL('image/jpeg', quality);
+      compressedImg.src = dataUrl;
+      downloadBtn.href = dataUrl;
+
+      // حساب الحجم التقريبي للـ Base64
+      const head = 'data:image/jpeg;base64,';
+      const sizeInBytes = Math.round((dataUrl.length - head.length) * 3 / 4);
+      compressedSize.innerText = (sizeInBytes / 1024).toFixed(2) + " KB";
+    };
+  }
+</script>
+
+</body>
+</html>
