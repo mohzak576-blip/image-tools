@@ -3,58 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>أداة ضغط الصور السريعة</title>
+  <title>أداة ضغط الصور المجانية | ضغط وتحسين الصور أونلاين</title>
+  <meta name="description" content="أداة مجانية لضغط الصور وتقليل حجمها اونلاين دون التأثير على الجودة. أدوات صور احترافية وسريعة للأفراد والمطورين.">
+  
+  <!-- ضع كود Google AdSense الخاص بك هنا مستقبلاً -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
   <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; padding: 20px; margin: 0; }
-    .container { background: #1e293b; border-radius: 12px; padding: 24px; max-width: 600px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-    h1 { text-align: center; color: #38bdf8; margin-top: 0; }
-    .upload-area { border: 2px dashed #38bdf8; border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; margin-bottom: 20px; }
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --primary: #38bdf8;
+      --primary-hover: #7dd3fc;
+      --text-color: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; line-height: 1.6; }
+    
+    header { background: var(--card-bg); padding: 15px 20px; border-bottom: 1px solid #334155; text-align: center; }
+    header h1 { color: var(--primary); font-size: 1.8rem; }
+
+    .main-container { max-width: 900px; margin: 30px auto; padding: 0 20px; flex: 1; width: 100%; }
+    
+    .tool-card { background: var(--card-bg); border-radius: 12px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); margin-bottom: 30px; }
+    .upload-area { border: 2px dashed var(--primary); border-radius: 8px; padding: 35px; text-align: center; cursor: pointer; transition: 0.3s; }
     .upload-area:hover { background: #334155; }
     input[type="file"] { display: none; }
+    
     .controls { display: none; margin-top: 20px; }
     label { display: block; margin-bottom: 8px; font-weight: bold; }
-    input[type="range"] { width: 100%; margin-bottom: 15px; }
+    input[type="range"] { width: 100%; margin-bottom: 15px; cursor: pointer; }
+    
     .preview-container { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
-    .preview-box { flex: 1; min-width: 200px; background: #0f172a; padding: 10px; border-radius: 6px; text-align: center; }
-    img { max-width: 100%; height: auto; border-radius: 4px; }
-    .btn { background: #38bdf8; color: #0f172a; font-weight: bold; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 15px; }
-    .btn:hover { background: #7dd3fc; }
+    .preview-box { flex: 1; min-width: 220px; background: #0f172a; padding: 12px; border-radius: 8px; text-align: center; }
+    img { max-width: 100%; height: auto; border-radius: 4px; margin-top: 8px; }
+    
+    .btn { background: var(--primary); color: #0f172a; font-weight: bold; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 15px; transition: 0.2s; }
+    .btn:hover { background: var(--primary-hover); }
+
+    /* الإعلانات */
+    .ad-slot { background: #1a2332; border: 1px dashed #334155; border-radius: 6px; padding: 15px; text-align: center; color: var(--text-muted); margin: 20px 0; font-size: 14px; }
+
+    /* المقال والأسئلة الشائعة */
+    .content-section { background: var(--card-bg); border-radius: 12px; padding: 25px; margin-bottom: 25px; }
+    .content-section h2 { color: var(--primary); margin-bottom: 15px; font-size: 1.4rem; }
+    .content-section p { color: var(--text-muted); margin-bottom: 12px; font-size: 0.95rem; }
+    
+    .faq-item { margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+    .faq-item h3 { color: #e2e8f0; font-size: 1.1rem; margin-bottom: 5px; }
+
+    /* الفوتر والصفحات القانونية */
+    footer { background: #090d16; padding: 20px; text-align: center; font-size: 14px; color: var(--text-muted); margin-top: 40px; }
+    footer a { color: var(--primary); text-decoration: none; margin: 0 10px; cursor: pointer; }
+    footer a:hover { text-decoration: underline; }
+
+    /* Modals */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+    .modal-content { background: var(--card-bg); padding: 25px; border-radius: 8px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; }
+    .close-modal { position: absolute; left: 15px; top: 15px; font-size: 20px; cursor: pointer; color: var(--text-muted); }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>أداة ضغط الصور المجانية</h1>
-  
-  <div class="upload-area" onclick="document.getElementById('imageInput').click()">
-    <p>اضغط هنا لرفع الصورة أو اسحبها إلى هنا</p>
-    <input type="file" id="imageInput" accept="image/*">
-  </div>
+<header>
+  <h1>أداة ضغط الصور الرقمية</h1>
+</header>
 
-  <div class="controls" id="controls">
-    <label for="quality">جودة الضغط: <span id="qualityVal">80</span>%</label>
-    <input type="range" id="quality" min="10" max="100" value="80">
+<div class="main-container">
 
-    <div class="preview-container">
-      <div class="preview-box">
-        <h4>الصورة الأصلية</h4>
-        <img id="originalImg" src="" alt="Original">
-        <p id="originalSize"></p>
-      </div>
-      <div class="preview-box">
-        <h4>بعد الضغط</h4>
-        <img id="compressedImg" src="" alt="Compressed">
-        <p id="compressedSize"></p>
-      </div>
+  <!-- مكان إعلانات أعلى الصفحة -->
+  <div class="ad-slot">مساحة إعلانية (Google AdSense)</div>
+
+  <!-- الأداة الرئيسية -->
+  <div class="tool-card">
+    <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+      <p style="font-size: 1.1rem; font-weight: bold;">اضغط هنا لرفع الصورة أو اسحبها إلى هنا</p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">يدعم صيغ JPG, PNG, WebP</p>
+      <input type="file" id="imageInput" accept="image/*">
     </div>
 
-    <a id="downloadBtn" download="compressed-image.jpg" style="text-decoration: none;">
-      <button class="btn">تحميل الصورة المضغوطة</button>
-    </a>
+    <div class="controls" id="controls">
+      <label for="quality">جودة الضغط: <span id="qualityVal">80</span>%</label>
+      <input type="range" id="quality" min="10" max="100" value="80">
+
+      <div class="preview-container">
+        <div class="preview-box">
+          <h4>الصورة الأصلية</h4>
+          <img id="originalImg" src="" alt="Original">
+          <p id="originalSize" style="margin-top: 5px; color: var(--primary); font-weight: bold;"></p>
+        </div>
+        <div class="preview-box">
+          <h4>بعد الضغط</h4>
+          <img id="compressedImg" src="" alt="Compressed">
+          <p id="compressedSize" style="margin-top: 5px; color: #4ade80; font-weight: bold;"></p>
+        </div>
+      </div>
+
+      <a id="downloadBtn" download="compressed-image.jpg" style="text-decoration: none;">
+        <button class="btn">تحميل الصورة المضغوطة</button>
+      </a>
+    </div>
+  </div>
+
+  <!-- مكان إعلانات منتصف الصفحة -->
+  <div class="ad-slot">مساحة إعلانية (Google AdSense)</div>
+
+  <!-- المقال المكتوب لقبول AdSense -->
+  <div class="content-section">
+    <h2>أهمية ضغط الصور وتحسين أداء المواقع الإلكترونية</h2>
+    <p>تُعد الصور من أكثر العناصر جذباً للزوار على شبكة الإنترنت، ولكنها في الوقت نفسه قد تكون السبب الرئيسي في بطء تحميل المواقع الإلكترونية، مما يؤدي إلى تجربة مستخدم سيئة وتراجع في ترتيب المواقع على محركات البحث مثل جوجل.</p>
+    <p>تتيح لك أداتنا المجانية لضغط الصور تقليل حجم ملفات الصور بنسبة تصل إلى 80% دون ملاحظة أي فقدان ملموس في الجودة البصرية. تعتمد الأداة على تقنيات ضغط متطورة تعمل مباشرة داخل متصفحك، مما يضمن أقصى درجات الأمان والخصوصية حيث لا يتم رفع صورك إلى أي سيرفرات خارجية.</p>
+  </div>
+
+  <!-- الأسئلة الشائعة FAQ -->
+  <div class="content-section">
+    <h2>الأسئلة الشائعة (FAQ)</h2>
+    <div class="faq-item">
+      <h3>هل يتم حفظ صوري على خوادم الموقع؟</h3>
+      <p>لا، جميع عمليات الضغط والمعالجة تتم محلياً داخل متصفحك باستخدام تقنيات JavaScript المتقدمة، مما يعني أن صورك لا تغادر جهازك أبداً.</p>
+    </div>
+    <div class="faq-item">
+      <h3>ما هي أفضل صيغة لضغط الصور للويب؟</h3>
+      <p>صيغة WebP و JPG هما الأفضل من حيث التوازن بين الحجم الصغير والجودة العالية مقارنة بصيغة PNG التي تكون أثقل حجماً.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- الفوتر والروابط القانونية -->
+<footer>
+  <p>© 2026 جميع الحقوق محفوظة - أداة ضغط الصور الرقمية</p>
+  <p style="margin-top: 10px;">
+    <a onclick="openModal('privacyModal')">سياسة الخصوصية</a> | 
+    <a onclick="openModal('termsModal')">الشروط والأحكام</a> | 
+    <a onclick="openModal('aboutModal')">من نحن</a> | 
+    <a onclick="openModal('contactModal')">اتصل بنا</a>
+  </p>
+</footer>
+
+<!-- Modals الصفحات القانونية -->
+<div id="privacyModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal('privacyModal')">&times;</span>
+    <h2 style="color:var(--primary); margin-bottom:10px;">سياسة الخصوصية</h2>
+    <p>نحن نحترم خصوصيتك تماماً. لا نقوم بجمع أو تخزين أو مشاركة أي صور تقوم بضغطها عبر موقعنا. تتم جميع العمليات داخل متصفحك بشكل آمن. نستخدم خدمات إعلانية مثل Google AdSense لتقديم إعلانات مخصصة تعتمد على ملفات الكوكيز لتحسين تجربة المستخدم.</p>
   </div>
 </div>
 
+<div id="termsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal('termsModal')">&times;</span>
+    <h2 style="color:var(--primary); margin-bottom:10px;">الشروط والأحكام</h2>
+    <p>باستخدامك لهذا الموقع، فإنك توافق على استخدام الأداة للأغراض الشخصية أو التجارية المشروعة. الموقع غير مسؤول عن أي استخدام غير قانوني للملفات المضغوطة، والأداة مقدمة مجاناً كما هي بدون أي ضمانات تشغيلية معقدة.</p>
+  </div>
+</div>
+
+<div id="aboutModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal('aboutModal')">&times;</span>
+    <h2 style="color:var(--primary); margin-bottom:10px;">من نحن</h2>
+    <p>موقع أدوات رقمية مجاني يهدف إلى تقديم أدوات سريعة، آمنة، وسهلة الاستخدام للمصممين، صناع المحتوى، والمطورين لمساعدتهم في تحسين ملفاتهم وتسهيل عملهم اليومي دون الحاجة لتثبيت برامج معقدة.</p>
+  </div>
+</div>
+
+<div id="contactModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal('contactModal')">&times;</span>
+    <h2 style="color:var(--primary); margin-bottom:10px;">اتصل بنا</h2>
+    <p>إذا كان لديك أي استفسارات أو اقتراحات لتطوير الموقع والأدوات، يمكنك التواصل معنا عبر البريد الإلكتروني الرسمى:</p>
+    <p style="color:var(--primary); font-weight:bold; margin-top:10px;">support@mytoolswebsite.com</p>
+  </div>
+</div>
+
+<!-- JavaScript للتشغيل -->
 <script>
   const imageInput = document.getElementById('imageInput');
   const qualityInput = document.getElementById('quality');
@@ -103,12 +226,15 @@
       compressedImg.src = dataUrl;
       downloadBtn.href = dataUrl;
 
-      // حساب الحجم التقريبي للـ Base64
       const head = 'data:image/jpeg;base64,';
       const sizeInBytes = Math.round((dataUrl.length - head.length) * 3 / 4);
       compressedSize.innerText = (sizeInBytes / 1024).toFixed(2) + " KB";
     };
   }
+
+  // التحكم بالـ Modals
+  function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+  function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 </script>
 
 </body>
